@@ -1,0 +1,33 @@
+
+version: "4"
+services:
+  backend:
+    build: ./backend-service
+    container_name:
+      backend-container
+    volumes:
+      - ./backend-service-data:/usr/src/myapp/data
+    networks:
+      messaging:
+        ipv4_address: 172.16.0.10
+
+
+  frontend:
+    build: ./frontend-service
+    container_name:
+      frontend-container
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      messaging:
+        ipv4_address: 172.16.0.11
+
+networks:
+  messaging:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.16.0.0/28
+

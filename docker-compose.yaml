@@ -1,0 +1,32 @@
+version: "4"
+services:
+  backend:
+    build: ./backend-service
+    container_name:
+      backend-container
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./backend-service-data:/usr/src/myapp/data
+    networks:
+      - messaging
+    restart: always
+
+
+  frontend:
+    build: ./frontend-service
+    container_name:
+      frontend-container
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - messaging
+    restart: always
+
+
+networks:
+  messaging:
+    driver: bridge
+
